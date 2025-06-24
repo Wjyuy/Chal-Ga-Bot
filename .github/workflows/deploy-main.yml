@@ -1,0 +1,38 @@
+name: Deploy to cloudtype
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Connect deploy key
+        uses: cloudtype-github-actions/connect@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          ghtoken: ${{ secrets.GHP_TOKEN }}
+      - name: Deploy
+        uses: cloudtype-github-actions/deploy@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          project: zhzhwm/moodsync
+          stage: main
+          yaml: |
+            name: chal-ga-bot-ssh
+            app: node@22
+            options:
+              ports: "3000"
+              start: node index.j
+              env:
+                - name: DISCORD_BOT_TOKEN
+                  var: DISCORD_BOT_TOKEN
+                - name: MAPLE_API
+                  var: MAPLE_API
+              buildenv: []
+            context:
+              git:
+                url: git@github.com:${{ github.repository }}.git
+                ref: ${{ github.ref }}
