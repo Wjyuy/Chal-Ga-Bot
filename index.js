@@ -17,7 +17,7 @@ const client = new Client({ intents: [
     GatewayIntentBits.MessageContent,
 ]});
 
-console.log("자동 배포 테스트");
+console.log("자동 배포 테스트2");
 
 //핸들러 생성(commands 까지 잘된다)
 new CommandHandler({
