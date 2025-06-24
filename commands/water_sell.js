@@ -35,7 +35,7 @@ module.exports = {
         .addFields(
           {
             name: "💧 현재 물 가격 안내",
-            value: `**${water}:1 **인 경우, ${number_water}개는 **${formattedTotalWon}원**입니다!\n`,
+            value: `**${water}:1 **인 경우, ${number_water}개는 **${formattedTotalWon}엄**입니다!\n`,
           },
           {
             name: "📈 경매장 계산",
