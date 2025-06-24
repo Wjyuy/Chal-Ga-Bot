@@ -38,7 +38,7 @@ jobs:
       - name: Run MapleStory Announcement Checker
         run: node maplestory_announcement_check.js
         env:
-          NEXON_API_KEY: ${{ secrets.MAPLE_API }} # GitHub Secret에서 API 키 주입
+          MAPLE_API: ${{ secrets.MAPLE_API }} # GitHub Secret에서 API 키 주입
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }} # GitHub Secret에서 웹훅 URL 주입
 
       # 5. 변경된 last_checked_announcement_url.txt 파일 커밋 및 푸시

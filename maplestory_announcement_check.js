@@ -4,8 +4,8 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
-// 환경 변수에서 값 가져오기 (GitHub Actions Secret에서 주입됨)
-const NEXON_API_KEY = process.env.NEXON_API_KEY;
+// 환경 변수에서 값 가져오기 (GitHub Actions Secret 또는 .env에서 주입됨)
+const NEXON_API_KEY = process.env.MAPLE_API; // <-- NEXON_API_KEY 대신 MAPLE_API 사용
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 
 // 상수 정의
@@ -14,7 +14,7 @@ const LAST_CHECKED_URL_FILE = 'last_checked_announcement_url.txt'; // 마지막 
 
 // 넥슨 API 헤더 설정
 const NEXON_API_HEADERS = {
-    'x-nxopenapi-api-key': NEXON_API_KEY,
+    'x-nxopen-api-key': NEXON_API_KEY,
 };
 
 // --- 유틸리티 함수 ---
@@ -51,7 +51,7 @@ function setLastCheckedUrl(url) {
  */
 async function getLatestMapleStoryAnnouncementFromAPI() {
     if (!NEXON_API_KEY) {
-        console.error('NEXON_API_KEY 환경 변수가 설정되지 않았습니다.');
+        console.error('MAPLE_API 환경 변수가 설정되지 않았습니다.'); // <-- 오류 메시지 수정
         return null;
     }
     try {
@@ -125,7 +125,7 @@ async function main() {
 
     if (lastCheckedUrl === null) {
         // 첫 실행이거나 파일이 없는 경우, 현재 최신 URL을 저장하고 알림은 보내지 않습니다.
-        console.log('last_checked_url.txt 파일이 없거나 첫 실행입니다. 현재 공지사항 URL을 저장합니다.');
+        console.log('last_checked_announcement_url.txt 파일이 없거나 첫 실행입니다. 현재 공지사항 URL을 저장합니다.');
         setLastCheckedUrl(latestAnnouncement.url);
     } else if (latestAnnouncement.url !== lastCheckedUrl) {
         // 새로운 공지사항이 발견된 경우
@@ -139,4 +139,3 @@ async function main() {
 }
 
 main();
-
