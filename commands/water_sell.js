@@ -13,7 +13,7 @@ module.exports = {
     .addStringOption((option) =>
       option
         .setName("비율")
-        .setDescription("2025/04/27 기준 1700:1 =>('1700' 입력!)")
+        .setDescription("2025/06/24 기준 1900:1 =>('1700' 입력!)")
         .setRequired(true)
     ),
 
@@ -25,8 +25,10 @@ module.exports = {
     // 총 금액 포맷팅 (1,000 단위로 쉼표 추가)
     const formattedTotalWon = total_won.toLocaleString();
 
-    var feeMoney = number_water - (number_water * (3 / 100));
-    const rounded = feeMoney.toFixed(2);
+    var feeMoneythree = number_water - (number_water * (3 / 100));
+    const roundedthree = feeMoneythree.toFixed(2);
+    var feeMoneyfive = number_water - (number_water * (3 / 100));
+    const roundedfive = feeMoneyfive.toFixed(2);
 
     try {
       const embed = new EmbedBuilder()
@@ -37,7 +39,11 @@ module.exports = {
           },
           {
             name: "📈 경매장 계산",
-            value: `약 **${rounded}억**을 받으실 수 있겠네요! (수수료 제외) 😊`,
+            value: `3%인 경우, 약 **${roundedthree}억**을 받으실 수 있겠네요!😊`,
+          },
+          {
+            name: "📈 교환 계산",
+            value: `5%인 경우, 약 **${roundedfive}억**을 받으실 수 있겠네요!😊`,
           }
         )
         .setTitle('물 계산기')
