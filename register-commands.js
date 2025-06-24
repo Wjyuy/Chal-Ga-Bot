@@ -1,17 +1,15 @@
-// register-commands.js 
+// node register-commands.js 
 
 // 필요한 모듈을 가져옵니다.
 const { REST, Routes } = require('discord.js');
 const fs = require('node:fs');
 // const path = require('node:path');
 const path = require("path");
-require('dotenv').config(); // .env 파일에서 환경 변수를 로드합니다.
+require('dotenv').config(); 
 
 const TOKEN = process.env.DISCORD_BOT_TOKEN;
 const CLIENT_ID = process.env.BOT_CLIENT_ID; 
 
-// 만약 특정 길드(서버)에서만 명령어를 테스트하고 싶다면 GUILD_ID를 설정합니다.
-// 전역 명령어를 등록할 것이므로, 보통 이 값은 필요 없습니다.
 // const GUILD_ID = 'YOUR_GUILD_ID'; // 특정 길드 ID (선택 사항)
 
 if (!TOKEN) {

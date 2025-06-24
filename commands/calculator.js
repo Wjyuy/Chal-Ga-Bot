@@ -33,16 +33,16 @@ module.exports = {
       const roundedthree = feeMoneythree.toFixed(2);
       try {
         const embed = new EmbedBuilder()
-        .setDescription(`${money}억을 갚기 위해 지불해야 하는 금액을 계산합니다!`)
+        .setDescription(`**${money}억**을 갚기 위해 지불해야 하는 금액을 계산합니다!`)
           .addFields(
             {
-              name: "채권자가 MVP가 아니거나 PC방이 아닌 곳에서 수령할 경우,",
-              value: `5%를 적용하면 약**${roundedfive}억** 입니다!`,
+              name: "채권자가 MVP가 아닌 경우",
+              value: `**5%**를 적용하면 약 **${roundedfive}억** 입니다!`,
               inline: true,
             },
             {
-              name: "채권자가 MVP거나 PC방에서 수령할 경우,",
-              value: `3%를 적용하면 **${roundedthree}억** 입니다!`,
+              name: "채권자가 MVP인 경우",
+              value: `**3%**를 적용하면 약 **${roundedthree}억** 입니다!`,
               inline: true,
             }
           )
