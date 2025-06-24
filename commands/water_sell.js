@@ -13,7 +13,7 @@ module.exports = {
     .addStringOption((option) =>
       option
         .setName("비율")
-        .setDescription("예시 1900:1")
+        .setDescription("예시: 1900/2000 등")
         .setRequired(true)
     ),
 
@@ -27,8 +27,12 @@ module.exports = {
 
     var feeMoneythree = number_water - (number_water * (3 / 100));
     const roundedthree = feeMoneythree.toFixed(2);
+    console.log(feeMoneythree);
+    console.log(roundedthree);
     var feeMoneyfive = number_water - (number_water * (5 / 100));
     const roundedfive = feeMoneyfive.toFixed(2);
+    console.log(feeMoneyfive);
+    console.log(roundedfive);
 
     try {
       const embed = new EmbedBuilder()
@@ -39,11 +43,11 @@ module.exports = {
           },
           {
             name: "📈 경매장 계산",
-            value: `3%인 경우, 약 **${roundedthree}억**을 받으실 수 있겠네요!😊`,
+            value: `3%인 경우, 약 **${roundedthree}억**을 받으실 수 있겠네요!`,
           },
           {
             name: "📈 교환 계산",
-            value: `5%인 경우, 약 **${roundedfive}억**을 받으실 수 있겠네요!😊`,
+            value: `5%인 경우, 약 **${roundedfive}억**을 받으실 수 있겠네요!`,
           }
         )
         .setTitle('물 계산기')
