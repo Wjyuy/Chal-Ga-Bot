@@ -7,7 +7,7 @@ module.exports = {
     .addStringOption((option) =>
       option
         .setName("개수")
-        .setDescription("구매 개수")
+        .setDescription("억 단위입니다!")
         .setRequired(true)
     )
     .addStringOption((option) =>
@@ -27,12 +27,8 @@ module.exports = {
 
     var feeMoneythree = number_water - (number_water * (3 / 100));
     const roundedthree = feeMoneythree.toFixed(2);
-    console.log(feeMoneythree);
-    console.log(roundedthree);
     var feeMoneyfive = number_water - (number_water * (5 / 100));
     const roundedfive = feeMoneyfive.toFixed(2);
-    console.log(feeMoneyfive);
-    console.log(roundedfive);
 
     try {
       const embed = new EmbedBuilder()
