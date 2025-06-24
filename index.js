@@ -179,5 +179,5 @@ client.on('messageCreate', (message) => {
     }
 })
  */
-// 5. 시크릿키(토큰)을 통해 봇 로그인 실행
+// 5. 시크릿키(토큰)을 통해 봇 로그인 실행2
 client.login(token);
