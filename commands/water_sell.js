@@ -13,7 +13,7 @@ module.exports = {
     .addStringOption((option) =>
       option
         .setName("비율")
-        .setDescription("2025/06/24 기준 1900:1 =>('1700' 입력!)")
+        .setDescription("예시 1900:1")
         .setRequired(true)
     ),
 
@@ -27,7 +27,7 @@ module.exports = {
 
     var feeMoneythree = number_water - (number_water * (3 / 100));
     const roundedthree = feeMoneythree.toFixed(2);
-    var feeMoneyfive = number_water - (number_water * (3 / 100));
+    var feeMoneyfive = number_water - (number_water * (5 / 100));
     const roundedfive = feeMoneyfive.toFixed(2);
 
     try {
