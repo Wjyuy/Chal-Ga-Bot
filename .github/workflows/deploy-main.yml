@@ -24,7 +24,6 @@ jobs:
             name: chal-ga-bot-ssh
             app: node@22
             options:
-              ports: "3000"
               start: node index.js
               env:
                 - name: DISCORD_BOT_TOKEN

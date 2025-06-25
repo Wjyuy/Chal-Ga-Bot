@@ -102,8 +102,7 @@ async function sendDiscordWebhook(announcement) {
         ],
         timestamp: new Date().toISOString(),
         footer: {
-            text: '메이플스토리 공식 Open API',
-            icon_url: 'https://placehold.co/20x20/FFA500/ffffff?text=N'
+            text: 'Data based on Nexon Open API',
         }
     };
 
