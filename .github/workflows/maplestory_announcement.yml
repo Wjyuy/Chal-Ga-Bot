@@ -2,6 +2,9 @@
 
 name: MapleStory Announcement Checker
 
+# 이 워크플로우를 언제 실행할지 정의합니다.
+# schedule을 사용하여 매 5분마다 실행하도록 설정합니다.
+# (cron 형식: 분 시 일 월 요일)
 on:
   schedule:
     - cron: '*/5 * * * *' # 매 5분마다 실행
@@ -14,10 +17,13 @@ jobs:
     permissions:
       contents: write 
     steps:
+      # 1. 저장소 코드 체크아웃
       # 스크립트 파일과 last_checked_announcement_url.txt 파일에 접근하기 위해 필요합니다.
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          # 워크플로우가 파일을 푸시할 수 있도록 권한이 필요합니다.
+          # GITHUB_TOKEN은 자동으로 제공되며, write 권한을 가집니다.
           token: ${{ secrets.GITHUB_TOKEN }}
 
       # 2. Node.js 환경 설정
@@ -39,19 +45,14 @@ jobs:
         run: node maplestory_announcement_check.js
         env:
           MAPLE_API: ${{ secrets.MAPLE_API }} # GitHub Secret에서 API 키 주입
-          
-          # API 방식으로 수정
-          BOT_NOTIFICATION_URL: ${{ secrets.BOT_NOTIFICATION_URL }}
-          BOT_NOTIFICATION_SECRET: ${{ secrets.BOT_NOTIFICATION_SECRET }}
-
-          # 웹후크 방식 썼던거 주석
-          # DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }} 
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }} # GitHub Secret에서 웹훅 URL 주입
 
       # --- 디버깅 단계 추가 ---
       - name: Check files after script run
         run: ls -la # 스크립트 실행 후 현재 디렉토리 파일 목록 확인
 
       # 5. 변경된 last_checked_announcement_url.txt 파일 커밋 및 푸시
+      # 새로운 공지사항이 발견되어 파일이 업데이트된 경우에만 실행됩니다.
       - name: Commit and push updated URL (if any)
         run: |
           git config user.name "github-actions[bot]"
@@ -59,5 +60,6 @@ jobs:
           git add ${{ github.workspace }}/last_checked_announcement_url.txt
           git commit -m "chore: Update last checked announcement URL" || echo "No changes to commit"
           git push || echo "No changes to push"
+        # `contents: write` 권한이 필요합니다. (actions/checkout@v4에서 token으로 설정됨)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
