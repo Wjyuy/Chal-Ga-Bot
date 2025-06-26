@@ -17,6 +17,8 @@ const client = new Client({ intents: [
     GatewayIntentBits.MessageContent,
 ]});
 
+// console.log("자동 배포 테스트2");
+
 //핸들러 생성(commands 까지 잘된다)
 new CommandHandler({
     client,
@@ -179,5 +181,5 @@ client.on('messageCreate', (message) => {
     }
 })
  */
-// 5. 시크릿키(토큰)을 통해 봇 로그인 실행
+// 5. 시크릿키(토큰)을 통해 봇 로그인 실행2
 client.login(token);

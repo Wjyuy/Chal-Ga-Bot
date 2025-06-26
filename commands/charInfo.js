@@ -63,6 +63,7 @@ module.exports = {
           [🔗환산 주스탯](https://maplescouter.com/info?name=${nickName}&preset=00000)
           [🔗레벨 히스토리](https://maplehistory.kr/character/${ocid})
           [🔗chuchu.gg](https://chuchu.gg/char/${nickName})`)
+        .setFooter({text : "Data based on Nexon Open API"})
         .addFields(
           {
             name: "서버",
