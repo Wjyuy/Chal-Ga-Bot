@@ -7,7 +7,7 @@ name: MapleStory Announcement Checker
 # (cron 형식: 분 시 일 월 요일)
 on:
   schedule:
-    - cron: '*/5 * * * *' # 매 5분마다 실행
+    - cron: '*/5 * * * *' # 매 5분마다 실행은 안되지만
   workflow_dispatch: {} # 수동으로 워크플로우를 실행할 수 있도록 허용
 
 jobs:
@@ -46,6 +46,8 @@ jobs:
         env:
           MAPLE_API: ${{ secrets.MAPLE_API }} # GitHub Secret에서 API 키 주입
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }} # GitHub Secret에서 웹훅 URL 주입
+          BOT_NOTIFICATION_URL: ${{ secrets.BOT_NOTIFICATION_URL }} 
+          BOT_NOTIFICATION_SECRET: ${{ secrets.BOT_NOTIFICATION_SECRET }}
 
       # --- 디버깅 단계 추가 ---
       - name: Check files after script run
