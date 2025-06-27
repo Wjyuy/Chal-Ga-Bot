@@ -1,16 +1,13 @@
 // node register-commands.js 
+// 함수들 정리할때 사용
 
-// 필요한 모듈을 가져옵니다.
 const { REST, Routes } = require('discord.js');
 const fs = require('node:fs');
-// const path = require('node:path');
 const path = require("path");
 require('dotenv').config(); 
 
 const TOKEN = process.env.DISCORD_BOT_TOKEN;
 const CLIENT_ID = process.env.BOT_CLIENT_ID; 
-
-// const GUILD_ID = 'YOUR_GUILD_ID'; // 특정 길드 ID (선택 사항)
 
 if (!TOKEN) {
     console.error('오류: DISCORD_BOT_TOKEN 환경 변수가 설정되지 않았습니다.');
