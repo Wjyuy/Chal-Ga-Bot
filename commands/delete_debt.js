@@ -62,56 +62,7 @@ module.exports = {
                     if (i.customId === 'select_debt_to_delete' && i.values?.[0]) {
                         debtToProcessId = i.values[0];
                     } 
-                    // '갚았어요! 확인' 버튼 클릭 처리 (채무자 요청 후 채권자 확인)
-                    else if (i.customId.startsWith('confirm_debt_paid_')) {
-                        debtToProcessId = i.customId.split('_')[3]; // customId에서 debtId 추출
-
-                        // Firestore에서 해당 장부 기록 다시 불러오기
-                        const debtDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'debt_records', debtToProcessId);
-                        const debtSnap = await getDoc(debtDocRef);
-
-                        if (!debtSnap.exists() || debtSnap.data().isPaid) {
-                            await interaction.followUp({
-                                content: '⚠️ 이미 처리되었거나 유효하지 않은 장부 기록입니다.',
-                                flags: 64
-                            });
-                            return;
-                        }
-                        const selectedDebtData = debtSnap.data();
-
-                        // * 채권자 확인 로직 (버튼 클릭한 유저 === 채권자)
-                        if (i.user.id !== selectedDebtData.lenderId) {
-                            await interaction.followUp({
-                                content: '❌ 당신은 이 장부의 채권자가 아니므로 완료 처리할 수 없습니다.',
-                                flags: 64
-                            });
-                            return;
-                        }
-
-                        // 장부 완료 처리
-                        await updateDoc(debtDocRef, {
-                            isPaid: true,
-                            paidAt: new Date().toISOString(),
-                            paidBy: i.user.id,
-                            paidByName: i.user.username
-                        });
-
-                        // '갚았어요! 확인' 버튼이 있던 메시지 업데이트 (비활성화 및 처리 완료 표시)
-                        await i.message.edit({
-                            content: `✅ 채무자 \`${selectedDebtData.debtorName}\`님과 채권자 \`${selectedDebtData.lenderName}\`님의 **${selectedDebtData.borrowedMeso}억** 장부가 완료 처리되었습니다.`,
-                            components: [new ActionRowBuilder().addComponents(
-                                new ButtonBuilder()
-                                    .setCustomId('done_processed')
-                                    .setLabel('처리됨')
-                                    .setStyle(ButtonStyle.Success)
-                                    .setDisabled(true)
-                            )]
-                        }).catch(e => console.error("확인 메시지 업데이트 실패:", e));
-
-                        // * 메인 /장부삭제 임베드 업데이트
-                        await updateMainEmbedAndComponents(interaction, outstandingDebtsQuery);
-                        return; // 처리 완료 후 종료
-                    }
+                    // '갚았어요! 확인' 버튼 클릭 처리는 이제 개별 컬렉터에서 담당
                     
                     // 장부 ID가 없으면 처리 중단
                     if (!debtToProcessId) { 
@@ -119,7 +70,6 @@ module.exports = {
                     }
 
                     // Firestore에서 현재 활성화된 장부 목록을 다시 가져와서 선택된 장부를 찾습니다.
-                    // 이는 initialOutstandingDebts가 컬렉터 시작 시점의 스냅샷이기 때문입니다.
                     const currentOutstandingSnap = await getDocs(outstandingDebtsQuery);
                     const currentOutstandingDebts = [];
                     currentOutstandingSnap.forEach(d => currentOutstandingDebts.push({ id: d.id, ...d.data() }));
@@ -144,8 +94,12 @@ module.exports = {
                             paidByName: i.user.username
                         });
                         await updateMainEmbedAndComponents(interaction, outstandingDebtsQuery); // 메인 메시지 업데이트
+                        await interaction.followUp({ // 완료 메시지 추가
+                            content: `✅ 장부 완료: 채무자 \`${selectedDebt.debtorName}\`님의 **${selectedDebt.borrowedMeso}억** 장부가 완료 처리되었습니다.`,
+                            flags: 64
+                        });
                     } 
-                    // 사용자가 채무자인 경우: 채권자에게 요청 메시지 전송
+                    // 사용자가 채무자인 경우: 채권자에게 요청 메시지 전송 및 새로운 컬렉터 생성
                     else if (i.user.id === selectedDebt.debtorId) {
                         const confirmButton = new ButtonBuilder()
                             .setCustomId(`confirm_debt_paid_${selectedDebt.id}`) // 고유 ID로 설정
@@ -155,8 +109,8 @@ module.exports = {
                         const requestRow = new ActionRowBuilder().addComponents(confirmButton);
 
                         // 채권자를 멘션하여 채널에 요청 메시지 전송
-                        await interaction.channel.send({
-                            content: `🔔 <@${selectedDebt.lenderId}>님! 채무자 \`${selectedDebt.debtorName}\`님이 **${selectedDebt.borrowedMeso}억** (${selectedDebt.feeRate === 0 ? '수수료 없음' : `${selectedDebt.feeRate}%`}) 장부에 대한 완료를 요청합니다.\n확인 후 아래 버튼을 눌러주세요. (기록 ID: \`${selectedDebt.id}\`)`,
+                        const requestMessage = await interaction.channel.send({ // * 새로 보내는 메시지 객체를 받음
+                            content: `🔔 <@${selectedDebt.lenderId}>님! 채무자 \`${selectedDebt.debtorName}\`님이 **${selectedDebt.borrowedMeso}억** (${selectedDebt.feeRate === 0 ? '수수료 없음' : `${selectedDebt.feeRate}%`}) 장부에 대한 완료를 요청합니다.\n확인 후 아래 버튼을 눌러주세요. (이 메시지는 5분까지 유지됩니다.)`,
                             components: [requestRow]
                         });
 
@@ -165,7 +119,77 @@ module.exports = {
                             flags: 64
                         });
 
-                        // 메인 임베드는 업데이트할 필요 없음 (요청만 보냈으므로)
+                        // * 새로 보낸 요청 메시지에 대한 별도의 컬렉터 생성
+                        const requestCollector = requestMessage.createMessageComponentCollector({
+                            filter: bI => bI.customId === `confirm_debt_paid_${selectedDebt.id}` && bI.user.id === selectedDebt.lenderId,
+                            time: 300000, // 5분 동안 유효
+                            max: 1 // 한 번만 클릭 가능하도록
+                        });
+
+                        requestCollector.on('collect', async bI => {
+                            try {
+                                await bI.deferUpdate(); // 버튼 상호작용 인정
+
+                                const debtDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'debt_records', selectedDebt.id);
+                                const debtSnap = await getDoc(debtDocRef);
+
+                                if (!debtSnap.exists() || debtSnap.data().isPaid) {
+                                    await bI.followUp({ // 버튼 클릭 사용자에게 메시지
+                                        content: '⚠️ 이미 처리되었거나 유효하지 않은 장부 기록입니다.',
+                                        flags: 64
+                                    });
+                                    return;
+                                }
+
+                                await updateDoc(debtDocRef, {
+                                    isPaid: true,
+                                    paidAt: new Date().toISOString(),
+                                    paidBy: bI.user.id,
+                                    paidByName: bI.user.username
+                                });
+
+                                // 요청 메시지 업데이트 (비활성화 및 처리 완료 표시)
+                                await bI.message.edit({
+                                    content: `✅ 채무자 \`${selectedDebt.debtorName}\`님과 채권자 \`${selectedDebt.lenderName}\`님의 **${selectedDebt.borrowedMeso}억** 장부가 완료 처리되었습니다.`,
+                                    components: [new ActionRowBuilder().addComponents(
+                                        new ButtonBuilder()
+                                            .setCustomId('done_processed')
+                                            .setLabel('처리됨')
+                                            .setStyle(ButtonStyle.Success)
+                                            .setDisabled(true)
+                                    )]
+                                }).catch(e => console.error("확인 메시지 업데이트 실패:", e));
+
+                                // 메인 /장부삭제 임베드 업데이트 (장부 목록 새로고침)
+                                await updateMainEmbedAndComponents(interaction, outstandingDebtsQuery);
+                                requestCollector.stop('processed'); // 처리 완료 후 컬렉터 종료
+
+                            } catch (error) {
+                                console.error('요청 확인 버튼 처리 중 오류 발생:', error);
+                                await bI.followUp({
+                                    content: '버튼 처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
+                                    flags: 64
+                                }).catch(e => console.error("followUp 실패 (요청 버튼 오류):", e));
+                                requestCollector.stop('error'); // 오류 발생 시 컬렉터 종료
+                            }
+                        });
+
+                        requestCollector.on('end', async (collected, reason) => {
+                            if (reason === 'time' && requestMessage && requestMessage.editable) {
+                                try {
+                                    // 시간 초과 시 버튼 비활성화
+                                    const disabledRow = ActionRowBuilder.from(requestRow);
+                                    disabledRow.components.forEach(comp => comp.setDisabled(true));
+                                    await requestMessage.edit({
+                                        content: `⚠️ 장부 완료 요청이 시간 초과되었습니다. 다시 요청해주세요.\n${requestMessage.content}`,
+                                        components: [disabledRow]
+                                    }).catch(e => console.error("요청 메시지 시간 초과 업데이트 실패:", e));
+                                } catch (e) {
+                                    console.error("요청 컬렉터 종료 시 메시지 업데이트 중 오류 발생:", e);
+                                }
+                            }
+                            console.log(`[장부 삭제] 요청 컬렉터 종료. 이유: ${reason}`);
+                        });
                     } 
                     // 채권자도 채무자도 아닌 경우: 권한 없음 메시지
                     else {
