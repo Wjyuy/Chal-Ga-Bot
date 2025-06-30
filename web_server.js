@@ -6,12 +6,17 @@ const { EmbedBuilder } = require('discord.js');
 require('dotenv').config(); // .env 파일 사용
 
 const app = express();
-// CloudType.io와 같은 플랫폼에서는 PORT 환경 변수를 제공합니다.
 const PORT = process.env.PORT || 3000; 
 
-// GitHub Actions에서 사용할 비밀 키 (보안용)
-// .env 파일에 BOT_NOTIFICATION_SECRET=YOUR_SECRET_KEY 형식으로 추가해야 합니다.
 const BOT_NOTIFICATION_SECRET = process.env.BOT_NOTIFICATION_SECRET;
+
+// 웹 서버 시작 시 BOT_NOTIFICATION_SECRET의 길이를 로그로 출력
+if (BOT_NOTIFICATION_SECRET) {
+    console.log(`[DEBUG] Web Server: BOT_NOTIFICATION_SECRET length: ${BOT_NOTIFICATION_SECRET.length}, first 5 chars: ${BOT_NOTIFICATION_SECRET.substring(0, 5)}`);
+} else {
+    console.error('[DEBUG] Web Server: BOT_NOTIFICATION_SECRET 환경 변수가 로드되지 않았습니다.');
+}
+
 
 // 미들웨어 설정
 app.use(express.json()); // JSON 형식의 요청 본문을 파싱합니다.
@@ -24,26 +29,32 @@ let currentAppId; // Firebase 앱 ID
 function startWebServer(client, dbInstance) {
     discordClient = client;
     firestoreDb = dbInstance;
-    currentAppId = require('./firebase_config').appId; // firebase_config에서 appId를 가져옵니다.
+    // firebase_config 모듈을 동적으로 가져와서 appId를 사용합니다.
+    // 이는 firebase_config가 먼저 초기화되도록 보장합니다.
+    currentAppId = require('./firebase_config').appId; 
 
     // --- API 엔드포인트 정의 ---
     app.post('/notify-announcement', async (req, res) => {
-        // 1. Secret Key 인증
         const receivedSecret = req.headers['x-notification-secret'];
+
+        // 요청 받은 Secret Key의 길이와 첫 몇 글자를 로그로 출력
+        console.log(`[DEBUG] Web Server: Received secret length: ${receivedSecret ? receivedSecret.length : 'N/A'}, first 5 chars: ${receivedSecret ? receivedSecret.substring(0, 5) : 'N/A'}`);
+
+        // 1. Secret Key 인증
         if (!receivedSecret || receivedSecret !== BOT_NOTIFICATION_SECRET) {
             console.warn('[웹 서버] 알림 요청: 유효하지 않은 Secret Key 또는 Secret Key 누락.');
             return res.status(403).send('Forbidden: Invalid or missing secret key');
         }
 
         // 2. 요청 본문에서 공지사항 데이터 추출
-        const { title, url, date } = req.body;
+        const { title, url, date, type } = req.body; // type 속성 추가
 
-        if (!title || !url) {
-            console.warn('[웹 서버] 알림 요청: 제목 또는 URL이 누락되었습니다.');
-            return res.status(400).send('Bad Request: Missing title or URL');
+        if (!title || !url || !type) { // type도 필수적으로 확인
+            console.warn('[웹 서버] 알림 요청: 제목, URL, 또는 타입이 누락되었습니다.');
+            return res.status(400).send('Bad Request: Missing title, URL, or type');
         }
 
-        console.log(`[웹 서버] 새로운 공지사항 수신: "${title}" (${url})`);
+        console.log(`[웹 서버] 새로운 공지사항 수신: "${title}" (${url}) - 타입: ${type}`);
 
         try {
             // 3. Firestore에서 알림 채널 ID 목록 조회
@@ -62,20 +73,32 @@ function startWebServer(client, dbInstance) {
                 return res.status(200).send('No notification channels configured.');
             }
 
-            // 4. Discord 임베드 메시지 생성
+            // 임베드 제목을 타입에 따라 다르게 설정
+            let embedTitlePrefix = '📢 새로운 메이플스토리 ';
+            if (type === 'notice') {
+                embedTitlePrefix += '공지사항: ';
+            } else if (type === 'event') {
+                embedTitlePrefix += '이벤트 공지: ';
+            } else if (type === 'update') { // *업데이트 공지 타입 추가
+                embedTitlePrefix += '업데이트 공지: ';
+            } else if (type === 'cashshop') { // *캐시샵 공지 타입 추가
+                embedTitlePrefix += '캐시샵 공지: ';
+            } else {
+                embedTitlePrefix += '알림: '; // 알 수 없는 타입
+            }
+
             const embed = new EmbedBuilder()
-                .setColor(0xFFA500) // 주황색
-                .setTitle(`📢 새로운 메이플스토리 공지사항: ${title}`)
+                .setColor(0xFFA500)
+                .setTitle(`${embedTitlePrefix}${title}`)
                 .setURL(url)
-                .setDescription('메이플스토리 공식 홈페이지에 새로운 공지사항이 등록되었습니다.')
+                .setDescription('메이플스토리 공식 홈페이지에 새로운 알림이 등록되었습니다.')
                 .addFields(
                     { name: '제목', value: title },
-                    { name: '바로가기', value: `[공지사항 링크](${url})` }
+                    { name: '바로가기', value: `[알림 링크](${url})` }
                 )
-                .setTimestamp(date ? new Date(date) : new Date()) // 공지사항 날짜가 있다면 사용, 없으면 현재 시간
+                .setTimestamp(date ? new Date(date) : new Date())
                 .setFooter({ text: '메이플스토리 공식 Open API', iconURL: 'https://placehold.co/20x20/FFA500/ffffff?text=N' });
 
-            // 5. 각 채널로 Discord 메시지 전송
             let sentCount = 0;
             for (const channelId of channelsToNotify) {
                 try {
@@ -83,7 +106,7 @@ function startWebServer(client, dbInstance) {
                     if (channel && channel.isTextBased()) {
                         await channel.send({ embeds: [embed] });
                         sentCount++;
-                        console.log(`[웹 서버] 채널 ${channel.name} (${channel.id})에 공지사항 전송 완료.`);
+                        console.log(`[웹 서버] 채널 ${channel.name} (${channel.id})에 알림 전송 완료. (타입: ${type})`);
                     } else {
                         console.warn(`[웹 서버] 채널 ${channelId}를 찾을 수 없거나 텍스트 채널이 아닙니다.`);
                     }
@@ -95,12 +118,11 @@ function startWebServer(client, dbInstance) {
             return res.status(200).send(`Notification sent to ${sentCount} channels.`);
 
         } catch (error) {
-            console.error('[웹 서버] 공지사항 전송 처리 중 오류 발생:', error);
+            console.error('[웹 서버] 알림 전송 처리 중 오류 발생:', error);
             return res.status(500).send('Internal Server Error while processing notification.');
         }
     });
 
-    // 웹 서버 시작
     app.listen(PORT, () => {
         console.log(`[웹 서버] 알림 수신 서버가 포트 ${PORT}에서 실행 중입니다.`);
     });

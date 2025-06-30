@@ -2,7 +2,7 @@
 
 안녕하세요! 챌가봇은 Discord 커뮤니티를 더 편리하고 즐겁게 만들어 줄 다기능 디스코드 봇입니다. 메이플스토리 게임 정보를 알려주고, 간단한 계산도 해줄 수 있습니다. **아직 개발 중**에 있습니다! 
 
-ReadME update_date:`2025-06-27`
+ReadME update_date:`2025-06-29`
 
 <p>혹시 이 프로젝트에 기여하고 싶으시다면 🤝Pull Request를 보내주세요!</p>
 
@@ -12,7 +12,7 @@ ReadME update_date:`2025-06-27`
 
 </p>
 
-| [챌가봇 초대링크](https://discord.com/oauth2/authorize?client_id=1354793432601591848&permissions=0&integration_type=0&scope=bot) | [개발자 디스코드 채널](https://discord.gg/uJtREc3n) | 
+| [챌가봇 초대링크](https://discord.com/oauth2/authorize?client_id=1354793432601591848&permissions=8&integration_type=0&scope=bot+applications.commands) | [개발자 디스코드 채널](https://discord.gg/uJtREc3n) | 
 
 ## ✨ 주요 기능
 챌가봇은 현재 다음과 같은 기능들을 제공합니다:
@@ -21,15 +21,113 @@ ReadME update_date:`2025-06-27`
 ### 🧑‍💻 캐릭터 정보 조회:
 메이플스토리 캐릭터의 레벨, 길드, 코디 등을 조회할 수 있습니다.
 
-### 📢 공지사항 알림(제작중):
+
+<table>
+  <tr>
+    <td align="center">명령어</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/c81f5a53-05cb-415f-b1d6-b40cac382aa5" alt="캐릭터" width="400"></td>
+  </tr>
+  <tr>
+    <td align="center">출력</td>
+  </tr>
+  <tr>
+    <td><img src="./libs/images/캐릭터.png" alt="캐릭터" width="400"></td>
+  </tr>
+</table>
+
+
+### 📢 공지사항 알림:
 넥슨 공식 API를 이용하여 메이플스토리의 새로운 공지사항이 올라올 때마다 설정된 디스코드 채널로 자동으로 알림을 보내줍니다.
 
 GitHub Actions 자동화 도구를 이용하여 주기적으로 확인하여 알림을 전달합니다. 
 
-**현재 Hooks 기능으로 제작되었습니다만 BOT_NOTIFICATION-web_server.js 방식으로 수정중에 있습니다!**
+아쉽지만 30분에 한번씩 체크합니다. 개선 예정입니다! 
+
+
+<table>
+  <tr>
+    <td align="center" colspan='2'>명령어</td>
+  </tr>
+  <tr>
+    <td align="center" colspan='2'><img src="https://github.com/user-attachments/assets/fe1dae80-d9d1-471f-b144-9f364fbace71" alt="공지사항" width="400"></td>
+  </tr>
+  <tr>
+    <td align="center" colspan='2'>출력</td>
+  </tr>
+  <tr>
+    <td align="center">채널추가</td>
+    <td align="center">삭제</td>
+  </tr>
+  <tr>
+    <td><img src="./libs/images/공지추가.png" alt="공지추가" width="200"></td>
+    <td><img src="./libs/images/공지삭제.png" alt="공지삭제" width="200"></td>
+  </tr>
+  <tr>
+    <td align="center" colspan='2'>자동알림</td>
+  </tr>
+  <tr>
+    <td align="center" colspan='2'><img src="./libs/images/공지알림.png" alt="공지알림" width="400"></td>
+  </tr>
+</table>
+
 
 ### 🔢 간단한 계산기:
-빚 가격 등 간단한 계산을 도와주는 기능입니다. (현재는 '빌린돈' 매개변수만 사용합니다.)
+빚 가격 등 간단한 계산을 도와주는 기능입니다.
+
+<table>
+  <tr>
+    <td align="center">명령어</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/869e3549-c453-4fec-b614-02a2873322ed" alt="빚계산기" width="400"></td>
+  </tr>
+  <tr>
+    <td align="center">출력</td>
+  </tr>
+  <tr>
+    <td><img src="./libs/images/빚계산기.png" alt="빚계산기" width="400"></td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td align="center">명령어</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/9cc420f0-026c-4986-9441-3824ec6d80f8" alt="돈빌려줘" width="400"></td>
+  </tr>
+  <tr>
+    <td align="center">출력</td>
+  </tr>
+  <tr>
+    <td><img src="./libs/images/돈빌려줘.png" alt="돈빌려줘" width="400"></td>
+  </tr>
+</table>
+
+### ⭐ 스타포스 시뮬레이터(제작중):
+실제 스타포스 확률과 동일한 강화를 수행합니다.(No 스타캐치/ No이벤트 기준. 수정 예정입니다.)
+
+`채널 별 High-Ranking 기능`
+`스타캐치/이벤트 선택 기능` 
+`보유 메소/소모 메소 체크 기능`
+도입 예정에 있습니다!
+
+<table>
+  <tr>
+    <td align="center">명령어</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/9affb113-cb7f-4e34-a406-e4d18d54ac6c" alt="스타포스" width="400"></td>
+  </tr>
+  <tr>
+    <td align="center">출력</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/6b4561d0-be91-416a-9985-801781d46233" alt="스타포스" width="400"></td>
+  </tr>
+</table>
 
 ### 📈 커뮤니티 단어 언급 랭킹(제작중):
 디스코드 채널에서 특정 단어들이 지난 24시간 동안 얼마나 많이 언급되었는지 집계하여 랭킹을 보여줍니다.
@@ -38,13 +136,14 @@ GitHub Actions 자동화 도구를 이용하여 주기적으로 확인하여 알
 
 
 ## 💬 명령어 사용법
-- [봇이 Discord 서버에 추가](https://discord.com/oauth2/authorize?client_id=1354793432601591848&permissions=0&integration_type=0&scope=bot)되면 다음 슬래시(/) 명령어를 사용할 수 있습니다.
+- 봇이 Discord 서버에 추가되면 다음 슬래시(/) 명령어를 사용할 수 있습니다.
     1. /캐릭터정보 [닉네임]:
         - 메이플스토리 캐릭터의 레벨, 길드, 코디 등 기본 정보를 조회합니다.
         - 예시: /캐릭터정보 닉네임:캐릭터명
     1. /공지채널설정 [채널]:
         - 메이플스토리 공지사항 알림을 받을 텍스트 채널을 설정합니다. (관리자 권한 필요)
         - 예시: /공지채널설정 #공지사항
+        - 예시: /공지채널삭제
     1. /계산기 [빌린돈]:
         - 입력한 '빌린돈'에 대한 계산을 수행합니다.
         - 예시: /계산기 빌린돈:10
@@ -54,9 +153,6 @@ GitHub Actions 자동화 도구를 이용하여 주기적으로 확인하여 알
     1. /스타포스시뮬레이터:
         - 실제 스타포스 확률과 동일한 강화를 수행합니다.
         - 예시: /스타포스시뮬레이터
-    1. /안성재:
-        - 안성재 셰프에게 통과,보류,탈락을 받습니다.
-        - 예시: /안성재 닉네임:캐릭터명
     1. /야구게임:
         - 야구게임입니다!
         - 예시: /야구게임
@@ -78,7 +174,8 @@ GitHub Actions 자동화 도구를 이용하여 주기적으로 확인하여 알
     - discord.js(^14.20.0)
     - djs-commander(^0.0.50)
     - dotenv (^16.5.0)
-    - express
+    - express (^5.1.0)
+    - firebase (^11.9.1)
 - Javascript
 - CloudType.io
 - Git
@@ -97,7 +194,6 @@ GitHub Actions 자동화 도구를 이용하여 주기적으로 확인하여 알
     1. `SCOPES (권한 범위)`에서 `bot`과 `applications.commands` 선택
     1. `BOT PERMISSIONS (봇 권한)`에서 `Administrator` (관리자) 또는 최소한 `Read Messages/View Channels`, `Send Messages`, `Embed Links`, `Manage Channels` 권한을 선택합니다.
     1. 아래에 생성된 URL을 복사하여 웹 브라우저에 붙여넣으면, 봇을 원하는 디스코드 서버에 초대할 수 있습니다.
-    1. [챌가봇 초대하기!](https://discord.com/oauth2/authorize?client_id=1354793432601591848&permissions=0&integration_type=0&scope=bot)
 
 2. GitHub 저장소 설정
 
@@ -213,20 +309,7 @@ GitHub Actions 자동화 도구를 이용하여 주기적으로 확인하여 알
             1. Run workflow 버튼을 클릭하여 수동으로 실행해보거나, 5분마다 자동으로 실행될 때까지 기다립니다.
 
             1. 워크플로우 로그를 통해 스크립트가 잘 실행되고 공지사항을 확인하는지 볼 수 있습니다.
-<!-- 
-### 🛠️ 문제 해결
-    1. 봇이 오프라인인가요?:
-        - node index.js를 실행한 터미널에 오류 메시지가 있는지 확인하거나, CloudType.io의 로그를 확인하세요.
 
-명령어가 작동하지 않나요?: /register-commands.js 스크립트를 node register-commands.js로 다시 실행하여 Discord에 명령어를 재등록해 보세요.
-
-공지사항 알림이 오지 않나요?:
-
-GitHub Actions 탭에서 "MapleStory Announcement Checker" 워크플로우의 실행 로그를 확인하세요. 오류가 있는지, 제대로 실행되었는지, last_checked_announcement_url.txt 파일이 올바르게 업데이트되었는지 확인합니다.
-
-GitHub Secrets에 MAPLE_API, BOT_NOTIFICATION_URL, BOT_NOTIFICATION_SECRET가 올바르게 설정되었는지 다시 확인합니다.
-
-Discord 봇이 배포되어 24시간 실행 중인지, BOT_NOTIFICATION_URL이 봇의 실제 주소와 일치하는지 확인합니다. -->
 
 ## 🤝 기여하기
 이 프로젝트에 기여하고 싶다면 언제든지 Pull Request를 보내주세요! 새로운 기능 제안, 버그 수정 등 모든 기여를 환영합니다.
@@ -236,4 +319,4 @@ Discord 봇이 배포되어 24시간 실행 중인지, BOT_NOTIFICATION_URL이 �
 - [🔗환산 주스탯](https://maplescouter.com)
 - [🔗레벨 히스토리](https://maplehistory.kr)
 - [🔗chuchu.gg](https://chuchu.gg)
-- [Data based on Nexon Open API](https://open.api.nexon.com/maplestory)
+- [Data based on Nexon Open API](https://openapi.nexon.com/ko/game/maplestory/)

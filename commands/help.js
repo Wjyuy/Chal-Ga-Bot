@@ -8,7 +8,7 @@ module.exports = {
   run: async ({ interaction }) => {
     try {
       // 파일 경로를 지정할 때 path.join을 사용해 경로를 해결
-      const filePath = path.join(__dirname, "..", "img", "hummingbird.jpg");
+      const filePath = path.join(__dirname, "..", "libs/images", "chalgabot.jpg");
       const file = new AttachmentBuilder(filePath);
 
       const embed = new EmbedBuilder()
@@ -16,6 +16,14 @@ module.exports = {
           {
             name: "/캐릭터",
             value: '메이플스토리 캐릭터의 정보를 가져옵니다.',
+          },
+          {
+            name: "/공지채널설정",
+            value: '메이플스토리 공지사항 채널을 설정합니다. 공지가 업로드되면 해당 채널로 알림이 전송됩니다.',
+          },
+          {
+            name: "/공지채널삭제",
+            value: '현재 서버에 설정된 메이플스토리 공지사항 채널을 삭제합니다.',
           },
           {
             name: "/돈빌려줘",
@@ -30,10 +38,6 @@ module.exports = {
             value: '30성의 주인이 되어보세요!',
           },
           {
-            name: "/안성재",
-            value: '안성재 셰프에게 통과,보류,탈락을 받습니다.',
-          },
-          {
             name: "/야구게임",
             value: '야구게임을 진행합니다!',
           }
@@ -41,7 +45,7 @@ module.exports = {
         .setColor(0xffc0cb)
         .setAuthor({
           name: '챌가봇 명령어',
-          iconURL: 'attachment://hummingbird.jpg', // 첨부된 파일을 iconURL로 사용
+          iconURL: 'attachment://chalgabot.jpg', // 첨부된 파일을 iconURL로 사용
         });
 
       // 이미지와 함께 응답

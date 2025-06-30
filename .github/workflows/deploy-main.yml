@@ -1,37 +1,50 @@
-name: Deploy to cloudtype
+name: Deploy to cloudtype # 워크플로우 이름
+
 on:
   push:
     branches:
-      - main
+      - main # main 브랜치에 푸시될 때 이 워크플로우 실행
+
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # 워크플로우를 실행할 가상 환경
+
     steps:
+      # 1. 저장소 코드 체크아웃
+      # cloudtype-github-actions/deploy@v1 액션에 코드가 필요하므로 체크아웃합니다.
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2 # 안정적인 v2 버전을 사용합니다.
+
+      # 2. CloudType 배포 키 연결
+      # CloudType에 배포하기 위한 인증 정보를 설정합니다.
       - name: Connect deploy key
         uses: cloudtype-github-actions/connect@v1
         with:
-          token: ${{ secrets.CLOUDTYPE_TOKEN }}
-          ghtoken: ${{ secrets.GHP_TOKEN }}
+          token: ${{ secrets.CLOUDTYPE_TOKEN }} # CloudType API 토큰 (GitHub Secret으로 등록 필요)
+          ghtoken: ${{ secrets.GHP_TOKEN }} # GitHub Personal Access Token (CloudType 연결용, GitHub Secret으로 등록 필요)
+
+      # 3. CloudType에 배포
+      # CloudType GitHub Action을 사용하여 실제 배포를 수행합니다.
       - name: Deploy
         uses: cloudtype-github-actions/deploy@v1
         with:
-          token: ${{ secrets.CLOUDTYPE_TOKEN }}
-          project: zhzhwm/moodsync
-          stage: main
+          token: ${{ secrets.CLOUDTYPE_TOKEN }} # CloudType API 토큰 재사용
+          project: zhzhwm/moodsync 
+          stage: main 
           yaml: |
-            name: chal-ga-bot-ssh
-            app: node@22
+            name: chal-ga-bot-ssh # 서비스 이름
+            app: node@22 # 앱 타입과 Node.js 버전
             options:
-              start: node index.js
-              env:
+              start: node index.js # 봇 시작 명령어
+              env: # 봇 서비스에 주입할 환경 변수 (CloudType 환경 변수에서 가져옴)
                 - name: DISCORD_BOT_TOKEN
                   var: DISCORD_BOT_TOKEN
                 - name: MAPLE_API
                   var: MAPLE_API
-              buildenv: []
-            context:
+                - name: BOT_NOTIFICATION_SECRET # 봇이 외부 알림을 받을 때 사용하는 비밀 키
+                  var: BOT_NOTIFICATION_SECRET
+            buildenv: [] # 빌드 시 사용할 환경 변수 (필요 없으면 비워둡니다)
+            context: # 배포할 Git 저장소의 컨텍스트
               git:
-                url: git@github.com:${{ github.repository }}.git
-                ref: ${{ github.ref }}
+                url: git@github.com:${{ github.repository }}.git # 저장소 URL
+                ref: ${{ github.ref }} # 현재 브랜치 (main 브랜치를 가리킴)
