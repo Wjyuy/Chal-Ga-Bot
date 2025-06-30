@@ -1,5 +1,8 @@
 // commands/스타포스시뮬레이터.js
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
+// fs와 path는 더 이상 최고 기록 저장에 사용되지 않으므로 제거하거나 주석 처리할 수 있습니다.
+// const fs = require('fs');
+// const path = require('path');
 
 // Firebase Firestore 관련 모듈 임포트
 const { db, appId } = require('../firebase_config');
@@ -11,7 +14,7 @@ module.exports = {
         .setName('스타포스시뮬레이터')
         .setDescription('30성의 주인이 되어보세요! (채널별 최고 기록 저장)'),
 
-    run: async ({ interaction }) => {
+    run: async ({ interaction }) => { // client는 현재 사용되지 않아 제거
         if (!interaction.isChatInputCommand()) return;
 
         // 채널별 기록 저장을 위한 문서 참조 경로
@@ -40,9 +43,10 @@ module.exports = {
             }
         } catch (firebaseError) {
             console.error('Firestore 기록 불러오기/초기화 오류:', firebaseError);
+            // 오류 발생 시 사용자에게 바로 응답
             return {
                 content: '😥 최고 기록을 불러오는 중 오류가 발생했어요. 다시 시도해 주세요.',
-                flags: 64 // 사용자에게만 보이는 임시 메시지
+                ephemeral: true
             };
         }
 
@@ -64,12 +68,11 @@ module.exports = {
                 .setStyle(ButtonStyle.Secondary)
         );
 
-        // * fetchReply 대신 withResponse 사용
-        // * djs-commander가 초기 응답을 처리하고 메시지 객체를 반환하도록 합니다.
-        const messageResponse = await interaction.reply({ 
+        // * djs-commander가 초기 응답을 처리하도록 객체를 반환
+        const messageResponse = await interaction.reply({ // await interaction.reply()로 초기 응답을 보냅니다.
             embeds: [embed],
             components: [row],
-            withResponse: true // fetchReply 대신 withResponse 사용
+            fetchReply: true // collector가 메시지를 수집할 수 있도록 메시지 객체를 가져옵니다.
         });
 
         // collector를 생성할 때 메시지 객체를 전달합니다.
@@ -100,7 +103,7 @@ module.exports = {
         collector.on('collect', async (i) => {
             try {
                 if (i.user.id !== interaction.user.id) {
-                    await i.deferUpdate();
+                    await i.deferUpdate(); // 다른 사용자의 버튼 클릭 무시
                     return;
                 }
 
