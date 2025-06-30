@@ -24,7 +24,7 @@ ReadME update_date:`2025-06-30`
 
 <table>
   <tr>
-    <td align="center">명령어</td>
+    <td align="center">캐릭터</td>
   </tr>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/c81f5a53-05cb-415f-b1d6-b40cac382aa5" alt="캐릭터" width="400"></td>
@@ -48,7 +48,7 @@ GitHub Actions 자동화 도구를 이용하여 주기적으로 확인하여 알
 
 <table>
   <tr>
-    <td align="center" colspan='2'>명령어</td>
+    <td align="center" colspan='2'>공지사항</td>
   </tr>
   <tr>
     <td align="center" colspan='2'><img src="https://github.com/user-attachments/assets/fe1dae80-d9d1-471f-b144-9f364fbace71" alt="공지사항" width="400"></td>
@@ -78,16 +78,40 @@ GitHub Actions 자동화 도구를 이용하여 주기적으로 확인하여 알
 
 <table>
   <tr>
-    <td align="center">명령어</td>
+    <td align="center">장부등록</td>
   </tr>
   <tr>
-    <td><img src="" alt="장부" width="400"></td>
+    <td><img src="https://github.com/user-attachments/assets/a1265f7f-67aa-42cb-bdb5-000dd3064971" alt="장부등록" width="400"></td>
   </tr>
   <tr>
     <td align="center">출력</td>
   </tr>
   <tr>
-    <td><img src="./libs/images/.png" alt="장부" width="400"></td>
+    <td><img src="./libs/images/장부등록.png" alt="장부등록" width="400"></td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td align="center">장부조회</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/04ffc152-c074-40e0-818d-b574af211b3b" alt="장부조회" width="400"></td>
+  </tr>
+  <tr>
+    <td align="center">출력</td>
+  </tr>
+  <tr>
+    <td><img src="./libs/images/장부조회.png" alt="장부조회" width="400"></td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td align="center">장부삭제</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/743ed6d9-77f6-4a43-b5ed-5e07bbb522f9" alt="장부삭제" width="400"></td>
   </tr>
 </table>
 
@@ -96,7 +120,7 @@ GitHub Actions 자동화 도구를 이용하여 주기적으로 확인하여 알
 
 <table>
   <tr>
-    <td align="center">명령어</td>
+    <td align="center">빚계산기</td>
   </tr>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/869e3549-c453-4fec-b614-02a2873322ed" alt="빚계산기" width="400"></td>
@@ -111,7 +135,7 @@ GitHub Actions 자동화 도구를 이용하여 주기적으로 확인하여 알
 
 <table>
   <tr>
-    <td align="center">명령어</td>
+    <td align="center">돈빌려줘</td>
   </tr>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/9cc420f0-026c-4986-9441-3824ec6d80f8" alt="돈빌려줘" width="400"></td>
@@ -134,7 +158,7 @@ GitHub Actions 자동화 도구를 이용하여 주기적으로 확인하여 알
 
 <table>
   <tr>
-    <td align="center">명령어</td>
+    <td align="center">스타포스</td>
   </tr>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/9affb113-cb7f-4e34-a406-e4d18d54ac6c" alt="스타포스" width="400"></td>
