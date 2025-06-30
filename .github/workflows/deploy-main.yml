@@ -43,6 +43,20 @@ jobs:
                   var: MAPLE_API
                 - name: BOT_NOTIFICATION_SECRET # 봇이 외부 알림을 받을 때 사용하는 비밀 키
                   var: BOT_NOTIFICATION_SECRET
+                - name: FB_apiKey 
+                  var: FB_apiKey
+                - name: FB_authDomain 
+                  var: FB_authDomain
+                - name: FB_projectId 
+                  var: FB_projectId
+                - name: FB_storageBucket 
+                  var: FB_storageBucket
+                - name: FB_messagingSenderId 
+                  var: FB_messagingSenderId
+                - name: FB_appId 
+                  var: FB_appId
+                - name: FB_measurementId 
+                  var: FB_measurementId
             buildenv: [] # 빌드 시 사용할 환경 변수 (필요 없으면 비워둡니다)
             context: # 배포할 Git 저장소의 컨텍스트
               git:
