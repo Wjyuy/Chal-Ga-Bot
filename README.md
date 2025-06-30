@@ -54,9 +54,6 @@ GitHub Actions 자동화 도구를 이용하여 주기적으로 확인하여 알
     <td align="center" colspan='2'><img src="https://github.com/user-attachments/assets/fe1dae80-d9d1-471f-b144-9f364fbace71" alt="공지사항" width="400"></td>
   </tr>
   <tr>
-    <td align="center" colspan='2'>출력</td>
-  </tr>
-  <tr>
     <td align="center">채널추가</td>
     <td align="center">삭제</td>
   </tr>
@@ -170,11 +167,6 @@ GitHub Actions 자동화 도구를 이용하여 주기적으로 확인하여 알
     <td><img src="https://github.com/user-attachments/assets/6b4561d0-be91-416a-9985-801781d46233" alt="스타포스" width="400"></td>
   </tr>
 </table>
-
-### (업데이트 예정) 📈 커뮤니티 단어 언급 랭킹:
-디스코드 채널에서 특정 단어들이 지난 24시간 동안 얼마나 많이 언급되었는지 집계하여 랭킹을 보여줍니다.
-
-우리 커뮤니티의 요즘 유행어는 무엇인지, 어떤 이야기가 가장 뜨거운지 한눈에 파악할 수 있게끔 제작 예정입니다!
 
 
 ## 💬 명령어 사용법
