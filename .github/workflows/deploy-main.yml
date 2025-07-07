@@ -32,10 +32,11 @@ jobs:
           project: zhzhwm/moodsync 
           stage: main 
           yaml: |
-            name: chal-ga-bot-ssh # 서비스 이름
-            app: node@22 # 앱 타입과 Node.js 버전
+            name: chal-ga-bot-ssh 
+            app: node@22 
             options:
-              start: node index.js # 봇 시작 명령어
+              ports: "3000"
+              start: node index.js 
               env: # 봇 서비스에 주입할 환경 변수 (CloudType 환경 변수에서 가져옴)
                 - name: DISCORD_BOT_TOKEN
                   var: DISCORD_BOT_TOKEN
